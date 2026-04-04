@@ -34,38 +34,41 @@ def auth_file(file_path):
 
     return data, path
 
-
 def add_entry(file_path):
-    data = auth_file(file_path)
-    print(f"Loaded data from {file_path}: type={type(data)}, len={len(data) if isinstance(data, list) else 'N/A'}")
+    data, path = auth_file(file_path)
 
-    datapnts = {
+    datapnts_daily = {
         "Date":"",
         "Calories":0,
         "Protein":0,
         "Sleep":0,
         "Bodyweight":0
         }
+
+    if path == file_path_daily:
+        for key in datapnts_daily:
+            value = input(f"Enter {key}:\n")
+            if key == "Date":
+                datapnts_daily[key] = value
+
+            else:
+                try:
+                    datapnts_daily[key] = float(value)
+
+                except ValueError:
+                    print(f"Invalid input for {key}, setting to 0.")
+                    datapnts_daily[key] = 0
+
+        data.append(datapnts_daily)
+
+        with open(file_path, 'w') as file:
+            json.dump(data, file, indent=2)
+
+        print(f"New entry added to {file_path.name}, total entries: {len(data)}")
     
-    for key in datapnts:
-        value = input(f"Enter {key}:\n")
-        if key == "Date":
-            datapnts[key] = value
-
-        else:
-            try:
-                datapnts[key] = float(value)
-
-            except ValueError:
-                print(f"Invalid input for {key}, setting to 0.")
-                datapnts[key] = 0
-
-    data.append(datapnts)
-
-    with open(file_path, 'w') as file:
-        json.dump(data, file, indent=2)
-
-    print(f"New entry added to {file_path.name}, total entries: {len(data)}")
+    elif path == file_path_wkt:
+        #add_workout()
+        return
 
 
 def load_data(file_path):
