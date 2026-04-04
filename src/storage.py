@@ -38,6 +38,7 @@ def auth_file(file_path):
 def add_entry(file_path):
     data = auth_file(file_path)
     print(f"Loaded data from {file_path}: type={type(data)}, len={len(data) if isinstance(data, list) else 'N/A'}")
+
     datapnts = {
         "Date":"",
         "Calories":0,
@@ -50,9 +51,11 @@ def add_entry(file_path):
         value = input(f"Enter {key}:\n")
         if key == "Date":
             datapnts[key] = value
+
         else:
             try:
                 datapnts[key] = float(value)
+
             except ValueError:
                 print(f"Invalid input for {key}, setting to 0.")
                 datapnts[key] = 0
@@ -61,6 +64,7 @@ def add_entry(file_path):
 
     with open(file_path, 'w') as file:
         json.dump(data, file, indent=2)
+
     print(f"New entry added to {file_path.name}, total entries: {len(data)}")
 
 
@@ -70,8 +74,10 @@ def load_data(file_path):
 
     if not data:
         print(f"No entries found in {file_path.name}. Initialised empty JSON file.")
+
     else:
         print(f"Loaded {len(data)} entries from {file_path.name}")
+
     return data
 
 # Run this function once with an altered .csv file path to migrate your CSV file to JSON format.
@@ -80,5 +86,6 @@ def load_data(file_path):
 #         reader = csv.DictReader(file, delimiter=',')
 #         rows = list(reader)
 #         print(rows)
+
 #         with open(file_path_daily, 'w') as jsonfile:
 #             json.dump(rows, jsonfile)
