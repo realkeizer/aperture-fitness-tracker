@@ -14,36 +14,65 @@ def create_json():
     if not file_path_daily.exists():
         with open(file_path_daily, 'w') as file:
             json.dump(default_structure, file, index=2)
-            
+
     if not file_path_wkt.exists():
         with open(file_path_wkt, 'w') as file:
             json.dump(default_structure, file, index=2)
 
-def add_entry():
-    datapnts = {"Date":"", "Calories":"", "Protein":"", "Sleep":"", "Bodyweight":""}
+def auth_file(file_path):
+    if file_path == file_path_daily:
+        path = file_path_daily
+
+    elif file_path == file_path_wkt:
+        path = file_path_wkt
+
+    else:
+        raise ValueError("Invalid file entered for data loading. Acceptable file names are daily_metrics.json and workouts.json.")
+    
+    with open(path, 'r') as file:
+        data = json.load(file)
+
+    return data, path
+
+
+def add_entry(file_path):
+    data = auth_file(file_path)
+    print(f"Loaded data from {file_path}: type={type(data)}, len={len(data) if isinstance(data, list) else 'N/A'}")
+    datapnts = {
+        "Date":"",
+        "Calories":0,
+        "Protein":0,
+        "Sleep":0,
+        "Bodyweight":0
+        }
+    
     for key in datapnts:
-        datapnts[key] = input(f"Enter {key}:\n")
-    with open(file_path_daily, 'w') as file:
-        json.dump(datapnts, file)
+        value = input(f"Enter {key}:\n")
+        if key == "Date":
+            datapnts[key] = value
+        else:
+            try:
+                datapnts[key] = float(value)
+            except ValueError:
+                print(f"Invalid input for {key}, setting to 0.")
+                datapnts[key] = 0
 
-def print_entries_daily():
-    with open(file_path_daily, 'r') as file:
-        contents = file.read()
-        jsonconvert = json.loads(contents)
-        jsonformat = json.dumps(jsonconvert, indent=2)
-        print(jsonformat)
+    data.append(datapnts)
 
-def print_entries_wkt():
-    with open(file_path_wkt, 'r') as file:
-        contents = file.read()
-        jsonconvert = json.loads(contents)
-        jsonformat = json.dumps(jsonconvert, indent=2)
-        print(jsonformat)
+    with open(file_path, 'w') as file:
+        json.dump(data, file, indent=2)
+    print(f"New entry added to {file_path.name}, total entries: {len(data)}")
+
 
 def load_data(file_path):
-    with open(file_path, 'r') as file:
-        contents = file.read()
-        return contents
+    create_json()
+    data = auth_file(file_path)
+
+    if not data:
+        print(f"No entries found in {file_path.name}. Initialised empty JSON file.")
+    else:
+        print(f"Loaded {len(data)} entries from {file_path.name}")
+    return data
 
 # Run this function once with an altered .csv file path to migrate your CSV file to JSON format.
 # def migrate_csv():
