@@ -97,3 +97,8 @@ def add_entry(file_path):
 #         with open(file_path_daily, 'w') as jsonfile:
 #             json.dump(rows, jsonfile)
 # migrate_csv()
+
+class Workout:
+    def __init__(self, date):
+        self.date = date
+        self.exercises = []
