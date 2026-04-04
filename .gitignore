@@ -1,0 +1,28 @@
+# Python bytecode
+__pycache__/
+*.py[cod]
+
+# Virtual environment
+venv/
+env/
+.venv/
+
+# Data files (auto-generated at runtime)
+data/daily_metrics.json
+data/workouts.json
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# IDE / editor files
+.vscode/
+.idea/
+
+# Temporary files
+*.tmp
+*.swp
+*.bak
