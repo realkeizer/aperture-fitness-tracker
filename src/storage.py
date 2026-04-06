@@ -72,5 +72,3 @@ def migrate_csv():
 
         with open(file_path_daily, 'w') as jsonfile:
             json.dump(rows, jsonfile, indent=2)
-
-save_to_json(file_path_wkt)
